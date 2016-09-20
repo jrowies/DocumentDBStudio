@@ -857,6 +857,9 @@ namespace Microsoft.Azure.DocumentDBStudio
                     text += " (more results might be available)";
                 }
 
+                this.isFirstTime = false;
+                this.Nodes.Clear();
+
                 string jsonarray = "[";
                 int index = 0;
                 foreach (dynamic d in r)
@@ -872,6 +875,13 @@ namespace Microsoft.Azure.DocumentDBStudio
                     else
                     {
                         jsonarray += ",\r\n";
+                    }
+
+                    using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(d.ToString())))
+                    {
+                        var doc = Resource.LoadFrom<Document>(memoryStream);
+                        ResourceNode node = new ResourceNode(client, doc, ResourceType.Document, ((DocumentCollection)this.Tag).PartitionKey);
+                        this.Nodes.Add(node);
                     }
                 }
 

@@ -72,7 +72,7 @@
         {
             if (NameRoutingMap[client.ServiceEndpoint.Host])
             {
-                return GetAltLink(resource);
+                return GetAltLink(resource) ?? resource.SelfLink;
             }
             else
             {
